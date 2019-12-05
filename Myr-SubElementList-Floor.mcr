@@ -1,9 +1,8 @@
 ﻿#Version 8
 #BeginDescription
-Last modified by: Myresjohus
-25.06.2019  -  version 1.15
+Last modified by: OBOS (Oscar.ragnerby@obos.se)
+05.12.2019  -  version 0.1 - Pilot Version
 
-Sending back module information to the Opening
 
 
 
@@ -22,8 +21,8 @@ Sending back module information to the Opening
 #DxaOut 0
 #ImplInsert 1
 #FileState 1
-#MajorVersion 1
-#MinorVersion 15
+#MajorVersion 0
+#MinorVersion 1
 #KeyWords 
 #BeginContents
 /*
@@ -43,42 +42,9 @@ Sending back module information to the Opening
 * REVISION HISTORY
 * -------------------------
 *
-* Created by: Anno Sportel (as@hsb-cad.com)
-* date: 21.04.2008
+* Created by: Oscar Ragnerby (Oscar.ragnerby@obos.se)
+* date: 05.12.2019
 * version 0.1: 	Pilot version
-* Created by: Anno Sportel (as@hsb-cad.com)
-* date: 20.10.2008
-* version 1.2: 	Rename the tsl from ModuleOrder to SubElementList
-*				Add information for delelement-lista to this tsl
-* date: 21.10.2008
-* version 1.3: Add opening information
-* date: 24.10.2008
-* version 1.4: Add turning direction for doors to opening name
-* date: 26.11.2008
-* version 1.5: Subtract wallheight from sillheight. 
-* date: 28.11.2008
-* version 1.6: Remove color from description
-*				Add extra field
-*				Remove SP, BSP & M info from description
-* date: 10.02.2009
-* version 1.7: Header information now on all beams of the sub-element
-*				Lifting information added
-* date: 25.02.2009
-* version 1.8: 	Lifting updated with check for dubble drill on one side (HHV -> HV)
-*				Swap V and H for lifting
-*				HangSide is retrieved from revit link now
-* version 1.9:  Change default-value to Vit on module colour     
-* date: 01.02.2018
-* version 1.10:  Add extra beam information.
-* date: 21.11.2018
-* version 1.11:  Set properties as property set
-* 
-* version 1.12: OpeningType read from mapx
-*
-* version 1.13: Door handle side read from mapx
-*
-* version 1.14: Added door hangside from mapx
-* version 1.15: Sending back module information to the Opening
 */
 
 //Sublabel2: 
@@ -117,20 +83,6 @@ int nIndexModuleInfo2		= 13; //On sub-element list
 Unit (1,"mm");
 double dEps = U(0.1);
 
-//Catalogue information on the extrusion profiles
-String sFileLocation = _kPathHsbCompany+"\\TSL";
-//String sFileName = "MyresjohusOpeningCatalogue.xml";
-//String sFullPath = sFileLocation + "\\" + sFileName;
-//Read this into a local map
-//Map mapOpenings;
-//int bMapIsRead = mapOpenings.readFromXmlFile(sFullPath);
-//if( !bMapIsRead ){
-//	reportWarning(TN("|The following file is missing:|")+"\n"+sFullPath);
-//	eraseInstance();
-//	return;
-//} 
-
-
 //---------------------------------------------------------------------------------------------------------------------
 //                                                                     Properties
 PropString moduleColor(0, "Vit", T("|Module Color|"));
@@ -161,9 +113,6 @@ for( int e=0;e<_Element.length();e++ ){
 	Element el = _Element[e];
 	if (!el.bIsValid())
 		continue;
-
-	//Opening arOp[0];
-	//arOp.append(el.opening());
 	
 	Vector3d vx = el.vecX();
 	Vector3d vy = el.vecY();
@@ -199,12 +148,7 @@ for( int e=0;e<_Element.length();e++ ){
 
 	Beam arBmModule[0];
 	int arNModuleIndex[0];
-	//int arNLiftingBeam[0];
 	String arSModule[0];
-	//String arSHeader[0];
-	//String arSLifting[0];
-	//int arNLifting[0];
-//	int modulesHasExtraBeam[0];
 
 	Beam arBmStud[0];
 	for( int i=0;i<arBm.length();i++ ){
@@ -222,41 +166,11 @@ for( int e=0;e<_Element.length();e++ ){
 				bFirstBeamOfModule = TRUE;
 				
 				arSModule.append(sModule);
-				//arSHeader.append("");
-				//arSLifting.append("");
-//				modulesHasExtraBeam.append(false);
 			}
 			
 			int moduleIndex = arSModule.find(sModule);
 			String beamCode = bm.beamCode().token(0);
-			
-//			if( beamCode == "HB" )
-//			{
-//				arSHeader[moduleIndex] = "B";
-//			}
-			
-//			if (beamCode == "ETL")
-//			{
-//				modulesHasExtraBeam[moduleIndex] = true;
-//			}
-			
 			String arSSubMapKeys[] = bm.subMapKeys();
-//			if( arSSubMapKeys.find("Lifting") != -1 ){
-//				
-//				Map mapBm = bm.subMap("Lifting");
-//				int nLiftingBeam = mapBm.getInt("LiftingBeam");
-//				if( nLiftingBeam ){
-//					//bm.setColor(3);
-//					if( bFirstBeamOfModule ){
-//						if( arSLifting[moduleIndex].find("H",0) == -1 )
-//							arSLifting[moduleIndex] += "H";
-//					}
-//					else{
-//						if( arSLifting[moduleIndex].find("V",0) == -1 )
-//							arSLifting[moduleIndex] += "V";
-//					}
-//				}
-//			}
 			
 			arNModuleIndex.append(moduleIndex);
 		}
@@ -324,131 +238,8 @@ for( int e=0;e<_Element.length();e++ ){
 		}
 	}
 	
-//	String arSTurningDirection[] = {T("Outside"),T("Inside")};
-//	String arSTurningDirectionFromLink[] = {"1", "-1"};
-//	int arNTurningDirection[] = {1, -1};
-////	PropString sTurningDirection(2, arSTurningDirection, T("Turning direction"));
-	
-////	String arSHangside[] = {T("Left"),T("Right")};
-////	String arSHangsideFromLink[] = {"V", "H"};
-////	PropString sHangside(3, arSHangside, T("Hangside"));
-	
 	PropString sHandle(4, "", T("|Handle|"));
 	sHandle.setReadOnly(TRUE);
-	
-//	//Link the opening to the right module
-//	Opening arOpening[arPtMaxModule.length()];
-//	Point3d arPtOpening[arPtMaxModule.length()];
-//	String arSModuleName[arPtMaxModule.length()];
-//	for (int i=0; i<arOp.length(); i++){
-//		OpeningSF op = (OpeningSF)arOp[i];
-//		
-//		
-//
-//		if( !op.bIsValid() ){
-//			continue;
-//		}
-//		
-//		
-//		
-//		PLine pl=op.plShape();
-//		Point3d ptCenter = Body(pl, vz).ptCen();
-//		//ptCenter.setToAverage(pl.vertexPoints(TRUE));
-//		
-//		//Compose sOpeningNameSearchKey
-//		
-//		//Get opening data
-//		String sArPropString[6];
-//		
-//		
-//		
-//		Element el = op.element();
-//		CoordSys elementCoordSys = el.coordSys();
-//		Vector3d elX = elementCoordSys.vecX();
-//		Vector3d elZ = elementCoordSys.vecZ();
-//		
-//		CoordSys openingCoordSys = op.coordSys();
-//		Vector3d openingX = openingCoordSys.vecX();
-//		Vector3d openingZ = openingCoordSys.vecZ();
-//		int facingFlipped = (elZ.dotProduct(openingZ) < 0);
-//		int handFlipped = (elX.dotProduct(openingX) < 0);
-//		
-//		sArPropString[2] = arSTurningDirection[facingFlipped ? 1 : 0];//arSTurningDirectionFromLink.find(sTurningDirectionFromLink,0)];//01
-//		
-//		//		String sHangsideFromLink =  opSF.type().token(2);
-//		sArPropString[3] = arSHangside[handFlipped ? 1 : 0];//arSHangsideFromLink.find(sHangsideFromLink,0)];  //02
-//	
-//		String sOpeningHandle = op.handle();
-//		sArPropString[4] = sOpeningHandle; //03
-//	
-//		
-//		//opMapX.setEntity("OpeningSF", op);
-//		Map opMapX = op.subMapX("REVITID");
-//		double dOpWidth = op.width();
-//		String sOpWidth; sOpWidth.formatUnit(dOpWidth, 2, 0);
-//		double dOpHeight = op.height();
-//		String sOpHeight; sOpHeight.formatUnit(dOpHeight, 2, 0);
-//		double dBottomHeight = op.sillHeight() - el.ptOrg().Z();
-//		String sBottomHeight; sBottomHeight.formatUnit(dBottomHeight, 2, 0);
-//		String sDetail = op.constrDetail();
-//		String sOpeningType = opMapX.getString("CATEGORY");
-//		//tring sOpeningType = op.type().token(0).makeUpper();	
-//		String sHangsideFromLink;
-//		if (sArPropString[3] == "Left") 
-//		{
-//			sHangsideFromLink = "V";
-//		}
-//		else
-//		{
-//			sHangsideFromLink = "H";
-//		}
-//		
-//		
-//		String sOpeningNameSearchKey = 
-//			sOpWidth + ";" + 
-//			sOpHeight + ";" + 
-//			sBottomHeight + ";" + 
-//			sDetail + ";" + 
-//			sOpeningType + ";" + 
-//			sWallHeight;
-//		
-//		//return;
-//		
-//		for( int j=0;j<arPtMaxModule.length();j++ ){
-//			Point3d ptMaxModule = arPtMaxModule[j];
-//			
-//			if( vx.dotProduct(ptCenter - ptMaxModule) < 0 ){
-//				arPtOpening[j] = ptCenter;
-//				ptCenter.vis(j);pl.vis(j);
-//				arOpening[j] = op;
-//				String sThisModuleName = "SX"+sOpWidth+"x"+sOpHeight+"-"+sBottomHeight;
-//				if( mapOpenings.hasMap(sOpeningNameSearchKey) ){
-//					Map mapThisOpening = mapOpenings.getMap(sOpeningNameSearchKey);
-//					sThisModuleName = mapThisOpening.getString("OpeningName");
-//					//sThisModuleName += sHangsideFromLink;
-//				}
-//				if( sOpeningType.makeUpper() == "DOORS" ){
-//					sThisModuleName += sHangsideFromLink;
-//				}
-//				
-//				arSModuleName[j] = sThisModuleName;
-//				break;
-//			}
-//		}
-//	}
-
-//	//Header present?
-//	String header = "";
-//	
-//	//Window door position
-//	String arSWallTypeDoorWindow[] = {
-//		"CP",
-//		"CT"
-//	};
-//	String sDoorWindow = "00";
-//	if( arSWallTypeDoorWindow.find(el.code()) != -1 ){
-//		sDoorWindow = "15";
-//	}
 	
 	//Fill in the subLabel2
 	int nIndexLastHeaderFound = 0;
@@ -457,59 +248,9 @@ for( int e=0;e<_Element.length();e++ ){
 				
 		int moduleIndex = arNModuleIndex[j];
 		String moduleName = bmModule.module();
-//		OpeningSF opModuleOpening = (OpeningSF)arOpening[moduleIndex];
-//		String header = arSHeader[moduleIndex];
-//		String sLifting = arSLifting[moduleIndex];
-//		int moduleHasExtraBeam = modulesHasExtraBeam[moduleIndex];
-		
-//		String sOpDescr = opModuleOpening.descrSF();
 		String sModuleInfo2;
 		
 		String moduleInfo = sModuleInfo;
-//		if (moduleHasExtraBeam)
-//		{
-//			String extraBeamTag = "Trälister";
-//			if (moduleInfo.find(extraBeamTag,0) == -1)
-//			{
-//				String separator = (moduleInfo.length() != 0) ? " - " : "";
-//				moduleInfo += (separator + extraBeamTag);
-//			}
-//		}
-		
-		//Only part before "-SP" or "-BSP" or "-M"
-//		int nIndexEndOfStringA = sOpDescr.find("BSP", 0);
-//		int nIndexEndOfStringB = sOpDescr.find("SP", 0);
-//		int nIndexEndOfStringC = sOpDescr.find("M", 0);
-//		int nIndexEndOfString = -1;
-//		if( nIndexEndOfStringA != -1 ){
-//			if( nIndexEndOfStringB != -1 && nIndexEndOfStringB < nIndexEndOfStringA ){
-//				nIndexEndOfString = nIndexEndOfStringB;
-//			}
-//			else{
-//				nIndexEndOfString = nIndexEndOfStringA;
-//			}
-//			
-//			if( nIndexEndOfStringC != -1 && nIndexEndOfStringC < nIndexEndOfString ){
-//				nIndexEndOfString = nIndexEndOfStringC;
-//			}
-//		}
-//		else if( nIndexEndOfStringB != -1 ){
-//			if( nIndexEndOfStringC != -1 && nIndexEndOfStringC < nIndexEndOfStringB ){
-//				nIndexEndOfString = nIndexEndOfStringC;
-//			}
-//			else{
-//				nIndexEndOfString = nIndexEndOfStringB;
-//			}
-//		}
-//		else if( nIndexEndOfStringC != -1 ){
-//			nIndexEndOfString = nIndexEndOfStringC;
-//		}
-//		
-//		if( nIndexEndOfString != -1 ){
-//			sOpDescr = sOpDescr.left(nIndexEndOfString - 1 );
-//			sModuleInfo2 = "X";
-//		}
-		
 		if( moduleIndex != -1 ){
 			String sSubLabel = bmModule.subLabel2();
 			
@@ -521,7 +262,6 @@ for( int e=0;e<_Element.length();e++ ){
 				nIndexSubLabel++;
 				if(sTokenSubLabel.length()==0){
 					sIndexSubLabel++;
-//					continue;
 				}
 				else{
 					sIndexSubLabel = sSubLabel.find(sTokenSubLabel,0);
@@ -535,7 +275,6 @@ for( int e=0;e<_Element.length();e++ ){
 			}
 			
 			String elementNumber = el.number();
-//			String facade = el.code();
 																							//0
 			arSSubLabel[nIndexElementName] = elementNumber;								//1
 			arSSubLabel[nIndexModuleOrder] = moduleIndex;								//2
@@ -548,15 +287,9 @@ for( int e=0;e<_Element.length();e++ ){
 //			arSSubLabel[nIndexLifting] = sLifting;												//9
 //			arSSubLabel[nIndexDoorWindow] = sDoorWindow; 								//10
 //			arSSubLabel[nIndexModuleDescription] = sOpDescr;								//11
-			
-		
-			//reportMessage(TN(moduleName.right(1)));
-			
-			
+						
 			if (moduleName.right(1) == "H" || moduleName.right(1)== "V") 
 			{
-				//reportMessage(TN(sOpDescr + moduleName.right(1)));
-				//reportMessage(TN(sOpDescr += moduleName.right(1));
 				arSSubLabel[nIndexModuleDescription] += moduleName.right(1); 
 			}
 			
@@ -573,8 +306,6 @@ for( int e=0;e<_Element.length();e++ ){
 			
 			
 			bmModule.setSubLabel2(sSubLabel);
-//			opModuleOpening.setDescription(sSubLabel);
-//			opModuleOpening.setNotes(bmModule.name("module"));
 			
 			String propSetName = "ModuleData";
 			int propSetExists = (bmModule.availablePropSetNames().find(propSetName) != -1);
