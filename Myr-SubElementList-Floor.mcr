@@ -63,32 +63,32 @@ Last modified by: OBOS (Oscar.ragnerby@obos.se)
 //	Info						12
 //	Info 2					13
 
-int nNrOfPositionsInString = 13;
+int nNrOfPositionsInString = 3;
 
-int nIndexMultiElement 		= 0; //On sub-element list
+int nIndexFloorgroup 		= 0; //On sub-element list
 int nIndexElementName 		= 1; //On sub-element list
 int nIndexModuleOrder 		= 2; //Used to order the modules on the sub-element list
 int nIndexModuleName 		= 3; //On sub-element list
-int nIndexFacade 			= 4; //On sub-element list
-int nIndexModuleColor 		= 5; //On sub-element list
-int nIndexHeader 			= 6; //On sub-element list
-int nIndexSteelplate 			= 7; //On sub-element list
-int nIndexSteelplateColor 	= 8; //On sub-element list
-int nIndexLifting 				= 9; //On sub-element list
-int nIndexDoorWindow 		= 10; //On sub-element list
-int nIndexModuleDescription	= 11; //On sub-element list
-int nIndexModuleInfo		= 12; //On sub-element list
-int nIndexModuleInfo2		= 13; //On sub-element list
+//int nIndexFacade 			= 4; //On sub-element list
+//int nIndexModuleColor 		= 5; //On sub-element list
+//int nIndexHeader 			= 6; //On sub-element list
+//int nIndexSteelplate 			= 7; //On sub-element list
+//int nIndexSteelplateColor 	= 8; //On sub-element list
+//int nIndexLifting 				= 9; //On sub-element list
+//int nIndexDoorWindow 		= 10; //On sub-element list
+//int nIndexModuleDescription	= 11; //On sub-element list
+//int nIndexModuleInfo		= 12; //On sub-element list
+//int nIndexModuleInfo2		= 13; //On sub-element list
 
 Unit (1,"mm");
 double dEps = U(0.1);
 
 //---------------------------------------------------------------------------------------------------------------------
 //                                                                     Properties
-PropString moduleColor(0, "Vit", T("|Module Color|"));
-PropString sSteelplate(1, "Plåt", T("|Steelplate|"));
-PropString sSteelplateColor(2, "Vit", T("|Steelplate Color|"));
-PropString sModuleInfo(3, "", T("|Module Information|"));
+//PropString moduleColor(0, "Vit", T("|Module Color|"));
+//PropString sSteelplate(1, "Plåt", T("|Steelplate|"));
+//PropString sSteelplateColor(2, "Vit", T("|Steelplate Color|"));
+PropString sModuleInfo(1, "", T("|Module Information|"));
 
 if( _bOnInsert ){
 	if (insertCycleCount()>1) { eraseInstance(); return; }
@@ -247,7 +247,7 @@ for( int e=0;e<_Element.length();e++ ){
 		Beam bmModule = arBmModule[j];
 				
 		int moduleIndex = arNModuleIndex[j];
-		String moduleName = bmModule.module();
+		String moduleName = "4HALVFAB";
 		String sModuleInfo2;
 		
 		String moduleInfo = sModuleInfo;
@@ -275,7 +275,10 @@ for( int e=0;e<_Element.length();e++ ){
 			}
 			
 			String elementNumber = el.number();
-																							//0
+			String elFloor = el.elementGroup();
+			
+			
+			arSSubLabel[nIndexFloorgroup] = elFloor.token(0, "\\");							//0
 			arSSubLabel[nIndexElementName] = elementNumber;								//1
 			arSSubLabel[nIndexModuleOrder] = moduleIndex;								//2
 			arSSubLabel[nIndexModuleName] = moduleName;								//3
@@ -288,13 +291,13 @@ for( int e=0;e<_Element.length();e++ ){
 //			arSSubLabel[nIndexDoorWindow] = sDoorWindow; 								//10
 //			arSSubLabel[nIndexModuleDescription] = sOpDescr;								//11
 						
-			if (moduleName.right(1) == "H" || moduleName.right(1)== "V") 
-			{
-				arSSubLabel[nIndexModuleDescription] += moduleName.right(1); 
-			}
+//			if (moduleName.right(1) == "H" || moduleName.right(1)== "V") 
+//			{
+//				arSSubLabel[nIndexModuleDescription] += moduleName.right(1); 
+//			}
 			
-			arSSubLabel[nIndexModuleInfo] = moduleInfo;									//12
-			arSSubLabel[nIndexModuleInfo2] = sModuleInfo2;								//13
+			//arSSubLabel[nIndexModuleInfo] = moduleInfo;									//12
+			//arSSubLabel[nIndexModuleInfo2] = sModuleInfo2;								//13
 
 			sSubLabel = "";
 			for( int k=0;k<arSSubLabel.length();k++ ){
@@ -355,11 +358,11 @@ eraseInstance();
 <?xml version="1.0" encoding="utf-16"?>
 <Hsb_Map>
   <lst nm="TslIDESettings">
-    <lst nm="HostSettings">
-      <dbl nm="PreviewTextHeight" ut="L" vl="1" />
+    <lst nm="HOSTSETTINGS">
+      <dbl nm="PREVIEWTEXTHEIGHT" ut="L" vl="1" />
     </lst>
     <lst nm="{E1BE2767-6E4B-4299-BBF2-FB3E14445A54}">
-      <lst nm="BreakPoints" />
+      <lst nm="BREAKPOINTS" />
     </lst>
   </lst>
   <lst nm="TslInfo">
